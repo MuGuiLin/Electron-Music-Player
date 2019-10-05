@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../public/css/bootstrap.css">
+    <title>在线搜索</title>
+    <style>
+        h2 {
+            text-align: center;
+            color: #0091f2;
+            ;
+        }
+
+        h2 i {
+            vertical-align: middle;
+            font-size: 50px;
+        }
+
+        header {
+            box-sizing: border-box;
+            height: 50px;
+            text-align: center;
+        }
+
+        header input {
+            padding-left: 6px;
+            width: 480px;
+            height: 40px;
+            border: 1px solid gray;
+
+        }
+
+        header button {
+            width: 200px;
+            height: 40px;
+            color: white;
+            font-size: 16px !important;
+        }
+
+        button {
+            border: 1px solid #0091f2 !important;
+            background: #0091f2 !important;
+        }
+
+        .row {
+            margin: 20px auto;
+            height: 460px;
+            overflow-y: auto;
+        }
+
+        table,
+        th {
+            color: #0091f2;
+            text-align: center;
+            font-size: 16px !important;
+        }
+
+        td,
+        th {
+            line-height: 32px !important;
+        }
+
+        td {
+            color: white;
+            font-size: 14px !important;
+        }
+        td input{
+            width: 18px;
+            height: 18px;
+        }
+
+        .glyphicon-play {
+            border: 1px solid white !important;
+        }
+        .all-check{
+            padding-left: 41px;
+            font-size: 16px;
+            color: #0091f2;
+        }
+        .all-check input{
+            width: 20px;
+            height: 20px;
+            vertical-align: sub;
+        }
+    </style>
+</head>
+
+<body>
+    <h2><i class="glyphicon glyphicon-cloud" aria-hidden="true"></i> 在线搜索音乐</h2>
+    <hr>
+
+    <section class="container">
+        <header>
+            <input type="text" id="search-txt" placeholder="歌名/作者" />
+            <button id="search-btn" class="glyphicon glyphicon-search"> 搜索</button>
+        </header>
+    </section>
+
+    <section class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>选择</th>
+                            <th>歌曲</th>
+                            <th>歌手</th>
+                            <th>专辑</th>
+                            <th>试听</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <tr>
+                            <td colspan="5" style="color: black; font-size: 16px!important;">请搜索网络音乐</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <label class="all-check"><input type="checkbox" id="allCheck" /> 全选 / 全不选</label>
+            <button id="import-music-btn" class="btn btn-block btn-success" disabled>
+                <span class="glyphicon glyphicon-send" aria-hidden="true"></span> 导入到音乐库
+            </button>
+        </div>
+        <br /><br />
+    </section>
+
+
+    <script>
+        require('../models/online.js');
+        // window.addEventListener('DOMContentLoaded', () => {
+        //     // const render = require('../models/render.js');
+        //     // alert('render.mupiao');
+        //     //alert('当前DOM对象加载完成时，我就会触发！');
+        // });
+    </script>
+</body>
+
+</html>

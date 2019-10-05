@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../public/css/bootstrap.css">
+    <title>本地音乐</title>
+    <style>
+        h2 {
+            text-align: center;
+            color: #0091f2;
+        }
+
+        h2 i {
+            vertical-align: middle;
+            font-size: 40px;
+        }
+
+        table {
+            text-align: center;
+            font-size: 16px !important;
+        }
+        th {
+            color: #0091f2;
+            text-align: center;
+            font-size: 16px !important;
+        }
+
+        button {
+            margin: 20px auto;
+            font-size: 16px !important;
+        }
+        button {
+            background: #0091f2!important;
+            border: 1px solid #0091f2!important; 
+        }
+        .table-box {
+            margin: 20px auto;
+            height: 460px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h2><i class="glyphicon glyphicon-music" aria-hidden="true"></i> 添加本地音乐</h2>
+    <hr>
+
+    <section class="container">
+        <div class="row table-box">
+            <div class="col-md-12">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>文件</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <tr>
+                            <td colspan="2">请选择音频文件</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <button id="select-music-btn" class="btn btn-block btn-success">
+                    <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> 选择本地音乐
+                </button>
+            </div>
+
+            <div class="col-md-6">
+                <button id="import-music-btn" class="btn btn-block btn-primary">
+                    <span class="glyphicon glyphicon-send" aria-hidden="true"></span> 导入到音乐库
+                </button>
+            </div>
+        </div>
+        <br /><br />
+
+    </section>
+
+    <script>
+        require('../models/local.js');
+    </script>
+
+</body>
+
+</html>

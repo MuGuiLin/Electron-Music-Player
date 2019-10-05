@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../public/css/bootstrap.css">
+    <title>沐枫音乐播放器</title>
+    <style>
+        h1 {
+            text-align: center;
+            color: #0091f2;
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 50px;
+            font-size: 16px;
+            background: #0091f2;
+        }
+
+        .header button {
+            font-size: 15px !important;
+            padding: 6px 10px;
+        }
+
+        .container {
+            position: absolute;
+            top: 51px;
+            right: 0;
+            bottom: 81px;
+            left: 0;
+            overflow-y: auto;
+        }
+
+        .music-list-box {
+            margin: 0;
+            padding: 0;
+        }
+
+        .music-list-box li {
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            height: 50px;
+            user-select: none;
+        }
+
+        .music-list-box li .glyphicon-headphones {
+            margin: auto;
+            padding-top: 200px;
+            color: #0091f2;
+            font-size: 24px;
+        }
+
+        .music-list-box li:nth-child(odd) {
+            background-color: white;
+        }
+
+        .music-list-box li:nth-child(even) {
+            background-color: #F8F8F8;
+        }
+
+        .music-list-box li:hover {
+            background-color: #F0F0F0;
+        }
+
+        .music-list-box li:hover .music-item-btn {
+            opacity: 1;
+        }
+
+        .music-list-box .music-item-now {
+            width: 30px;
+        }
+
+        .music-list-box .music-item-img {
+            display: none;
+        }
+
+        .music-list-box .music-item-box {
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .music-list-box .music-item-box>div {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .music-list-box .music-item-box-bot {
+            display: none !important;
+        }
+
+        .music-list-box .music-item-name {
+            flex: 1;
+            width: 100px;
+            text-align: left;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .music-list-box .music-item-name i {
+            margin: 0 6px;
+        }
+
+        .music-list-box .music-item-btn {
+            opacity: 0;
+            width: 100px;
+            transition: 1s;
+        }
+
+        .music-list-box .music-item-btn button {
+            background: none;
+            border: none;
+            color: #0091f2;
+            font-size: 16px;
+        }
+
+        .music-list-box .music-item-btn button.glyphicon-heart {
+            color: #FF0080;
+        }
+
+        .music-list-box .music-item-time {
+            padding: 0 10px;
+        }
+
+        .music-list-active {
+            background: #EBEBEB !important;
+        }
+
+        .music-list-active .music-item-img {
+            display: block;
+            width: 50px;
+            height: 50px;
+            background: #5f62ec;
+            color: white;
+        }
+
+        .music-list-active .music-item-img img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            animation: move-rotate 3s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .music-list-active .music-item-name {
+            padding-left: 10px;
+            width: auto;
+        }
+
+        .music-list-active .music-item-name i {
+            display: none;
+        }
+
+        .music-list-active .music-item-box-top .music-item-btn {
+            opacity: 1;
+            position: relative;
+            top: 20px;
+            right: 0px;
+
+        }
+
+        .music-list-active .music-item-box-top .music-item-time {
+            display: none;
+        }
+
+        .music-list-active .music-item-box-bot {
+            display: flex !important;
+        }
+
+        .glyphicon-music {
+            color: #4cae4c;
+        }
+
+
+        .header button,
+        .play-btn-box button {
+            background: #0091f2 !important;
+            border: 1px solid #0091f2 !important;
+        }
+
+        .error {
+            color: gray !important;
+        }
+
+        .error i {
+            color: gray !important;
+        }
+
+        .error button {
+            color: gray !important;
+            background: none !important;
+            border: none !important;
+        }
+
+        .error button i {
+            color: white !important;
+        }
+
+        @keyframes move-rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 80px;
+            background: #0091f2;
+        }
+
+        .footer>div {}
+
+        .footer .play-info-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 10px;
+            height: 26px;
+            font-size: 15px;
+            color: white;
+        }
+
+        .footer .play-btn-box {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .footer .play-btn-box button {
+            background: none;
+            opacity: 0.8;
+            color: white;
+            line-height: 24px;
+            text-align: center;
+            font-size: 16px !important;
+            transition: .3s;
+        }
+
+        .footer .play-btn-box button:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .footer .play-btn-box .play-operate button {}
+
+        .footer .play-btn-box .other-operate button {
+            color: white;
+        }
+
+        .footer .play-btn-box button.glyphicon-eject {
+            margin-top: 4px;
+        }
+        
+        .footer .play-btn-box button.glyphicon-heart {
+            margin-top: 2px;
+        }
+
+        .footer .play-btn-box button.glyphicon-volume-up {
+            font-size: 20px !important;
+        }
+
+        .footer .volume-box {
+            position: absolute;
+            left: 0;
+            opacity: 0;
+            bottom: 30px;
+            width: 30px;
+            height: 200px;
+            background: rgba(0, 88, 128, 0.8);
+            transition: .3s;
+        }
+        .footer .volume-box::before {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 12px;
+            bottom: 12px;
+            width: 6px;
+            height: 180px;
+            background: #81ACD1;
+            overflow: initial;
+            cursor: pointer;
+        }
+
+        .footer .volume-bar {
+            position: absolute;
+            left: 12px;
+            bottom: 12px;
+            width: 6px;
+            height: 180px;
+            background: #FFFEA1;
+        }
+
+        .footer .volume-btn {
+            position: absolute;
+            left: -3px;
+            top: -3px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #FFFEBB;
+            box-shadow: 0 0 8px 0 white;
+        }
+
+        .footer .play-btn-box button.glyphicon-volume-up:hover .volume-box{
+            opacity: 1;
+        }
+
+
+
+        .footer .play-speed-box {
+            padding: 0 10px;
+        }
+
+        .footer .play-speed-box .progress {
+            margin: 0;
+            margin-top: 6px;
+            height: 6px;
+            background: #81ACD1;
+            overflow: initial;
+            cursor: pointer;
+        }
+
+        .footer .play-speed-box .progress-bar {
+            position: relative;
+        }
+
+        .footer .play-speed-box .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #FFFEBB;
+            box-shadow: 0 0 12px 4px white;
+        }
+
+        .progress-bar {
+            background-color: #FFFEA1;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div>
+            <button id="" class="btn btn-success"><i class="glyphicon glyphicon-cog"></i> 设置</button>
+            <button id="" class="btn btn-success"><i class="glyphicon glyphicon-headphones"></i> 收藏</button>
+            <button id="" class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> 下载</button>
+            <button id="add-local-btn" class="btn btn-success"><i class="glyphicon glyphicon-folder-open"></i> &nbsp;添加</button>
+            <button id="add-lines-btn" class="btn btn-success"><i class="glyphicon glyphicon-search"></i> 搜索</button>
+        </div>
+        <div></div>
+        <div></div>
+    </header>
+
+    <section class="container">
+        <div class="row">
+            <ul class="music-list-box" id="music-list-box"></ul>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="play-info-box" id="play-info-box">
+            <marquee width="100" id="now-music-name" scrollamount="2" direction="left" align="middle">音乐名称</marquee>
+            <time><span id="play-seeker">00:00</span> / 00:00</time>
+        </div>
+        <div class="play-btn-box">
+            <div class="play-operate">
+                <button id="fast-prev-btn" class="btn btn-xs glyphicon glyphicon-fast-backward" title="慢速播放"></button>
+                <button id="prev-song-btn" class="btn btn-xs glyphicon glyphicon-step-backward" title="上一曲"></button>
+                <button id="play-paus-btn" class="btn btn-xs glyphicon glyphicon-play" title="播放/暂停"></button>
+                <button id="rest-play-btn" class="btn btn-xs glyphicon glyphicon-eject" title="正常播放"></button>
+                <button id="stop-play-btn" class="btn btn-xs glyphicon glyphicon-stop" title="停止播放"></button>
+                <button id="next-song-btn" class="btn btn-xs glyphicon glyphicon-step-forward" title="下一曲"></button>
+                <button id="fast-next-btn" class="btn btn-xs glyphicon glyphicon-fast-forward" title="快速播放"></button>
+            </div>
+            <div class="other-operate">
+                <button id="hear-play-btn" class="btn btn-xs glyphicon glyphicon-heart" title="收藏音乐"></button>
+                <button id="down-play-btn" class="btn btn-xs glyphicon glyphicon-download-alt" title="下载音乐"></button>
+                <button id="loop-play-btn" class="btn btn-xs glyphicon glyphicon-random" title="单曲循环"></button>
+                <button id="volu-size-btn" class="btn btn-xs glyphicon glyphicon-volume-up" title="音量大小">
+                    <div class="volume-box" id="volume-box">
+                        <div class="volume-bar" id="volume-bar">
+                            <div class="volume-btn"></div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+        </div>
+        <div class="play-speed-box">
+            <div class="progress" id="progress-box">
+                <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                    aria-valuemax="100" style="width: 0%"></div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- <script src="../public/js/base.js"></script> -->
+
+    <script>
+        require('../models/index.js');
+    </script>
+</body>
+
+</html>

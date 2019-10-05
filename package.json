@@ -1,0 +1,41 @@
+{
+  "name": "electron-music-player",
+  "version": "1.0.0",
+  "author": "沐枫",
+  "description": "本地、在线 音乐播放器",
+  "main": "main.js",
+  "license": "CC0-1.0",
+  "scripts": {
+    "start": "chcp 65001 && electron .",
+    "build": "electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "com.mupiao.app",
+    "productName": "Mupiao",
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "icon": "static/icon.ico"
+    }
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "Demo"
+  ],
+  "devDependencies": {
+    "electron": "^6.0.10",
+    "electron-builder": "^21.2.0"
+  },
+  "dependencies": {
+    "electron-store": "^5.0.0"
+  }
+}
