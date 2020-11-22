@@ -12,7 +12,6 @@
             text-align: center;
             color: #0091f2;
         }
-
         .header {
             display: flex;
             justify-content: center;
@@ -116,7 +115,7 @@
 
         .music-list-box .music-item-btn {
             opacity: 0;
-            width: 100px;
+            width: 128px;
             transition: 1s;
         }
 
@@ -169,7 +168,6 @@
             position: relative;
             top: 20px;
             right: 0px;
-
         }
 
         .music-list-active .music-item-box-top .music-item-time {
@@ -183,7 +181,6 @@
         .glyphicon-music {
             color: #4cae4c;
         }
-
 
         .header button,
         .play-btn-box button {
@@ -228,8 +225,6 @@
             background: #0091f2;
         }
 
-        .footer>div {}
-
         .footer .play-info-box {
             display: flex;
             justify-content: space-between;
@@ -258,10 +253,8 @@
 
         .footer .play-btn-box button:hover {
             opacity: 1;
-            transform: scale(1.2);
+            transform: scale(1.3);
         }
-
-        .footer .play-btn-box .play-operate button {}
 
         .footer .play-btn-box .other-operate button {
             color: white;
@@ -282,10 +275,11 @@
         .footer .volume-box {
             position: absolute;
             left: 0;
-            opacity: 0;
-            bottom: 30px;
+            display: none;
+            bottom: 25px;
             width: 30px;
             height: 200px;
+            border-radius: 4px;
             background: rgba(0, 88, 128, 0.8);
             transition: .3s;
         }
@@ -297,6 +291,7 @@
             bottom: 12px;
             width: 6px;
             height: 180px;
+            border-radius: 3px;
             background: #81ACD1;
             overflow: initial;
             cursor: pointer;
@@ -307,8 +302,9 @@
             left: 12px;
             bottom: 12px;
             width: 6px;
-            height: 180px;
-            background: #FFFEA1;
+            height: 90px;
+            border-radius: 3px;
+            background: #2eca31;
         }
 
         .footer .volume-btn {
@@ -323,10 +319,9 @@
         }
 
         .footer .play-btn-box button.glyphicon-volume-up:hover .volume-box{
-            opacity: 1;
+            transition: all 1s;
+            display: block;
         }
-
-
 
         .footer .play-speed-box {
             padding: 0 10px;
@@ -336,7 +331,8 @@
             margin: 0;
             margin-top: 6px;
             height: 6px;
-            background: #81ACD1;
+            border-radius: 3px;
+            background: #060066;
             overflow: initial;
             cursor: pointer;
         }
@@ -368,15 +364,15 @@
         <div>
             <button id="" class="btn btn-success"><i class="glyphicon glyphicon-cog"></i> 设置</button>
             <button id="" class="btn btn-success"><i class="glyphicon glyphicon-headphones"></i> 收藏</button>
-            <button id="" class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> 下载</button>
+            <button id="down-load-btn" class="btn btn-success"><i class="glyphicon glyphicon-download-alt"></i> 下载</button>
             <button id="add-local-btn" class="btn btn-success"><i class="glyphicon glyphicon-folder-open"></i> &nbsp;添加</button>
             <button id="add-lines-btn" class="btn btn-success"><i class="glyphicon glyphicon-search"></i> 搜索</button>
         </div>
         <div></div>
         <div></div>
     </header>
-
-    <section class="container">
+    
+    <section class="container" id="container">
         <div class="row">
             <ul class="music-list-box" id="music-list-box"></ul>
         </div>
@@ -413,8 +409,7 @@
         </div>
         <div class="play-speed-box">
             <div class="progress" id="progress-box">
-                <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-                    aria-valuemax="100" style="width: 0%"></div>
+                <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
             </div>
         </div>
     </footer>

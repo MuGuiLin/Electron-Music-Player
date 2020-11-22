@@ -11,7 +11,12 @@
         h2 {
             text-align: center;
             color: #0091f2;
-            ;
+        }
+
+        ul, li{
+            margin: 0;
+            padding: 0;
+            list-style: none;
         }
 
         h2 i {
@@ -20,24 +25,52 @@
         }
 
         header {
+            position: relative;
             box-sizing: border-box;
             height: 50px;
             text-align: center;
+            display: flex;
         }
 
         header input {
-            padding-left: 6px;
+            padding-left: 10px;
             width: 480px;
             height: 40px;
             border: 1px solid gray;
-
+            flex: 1;
         }
 
         header button {
+            top: 0!important;
             width: 200px;
             height: 40px;
             color: white;
+            vertical-align: top;
             font-size: 16px !important;
+        }
+        header .search-box{
+            position:absolute;
+            top: 39px;
+            left: 0;
+            right: 200px;
+            height: 300px;
+            display: none;
+            text-align: left;
+            border: 1px solid gray;
+            background: rgba(255, 255, 255, .9);
+            overflow-y: auto;
+            z-index: 666;
+        }
+
+        header .search-box li{
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        header .search-box li:hover {
+            color: white;
+            font-weight: bold;
+            background: rgba(0, 145, 242, .6);
         }
 
         button {
@@ -47,8 +80,11 @@
 
         .row {
             margin: 20px auto;
-            height: 460px;
             overflow-y: auto;
+        }
+
+        table{
+            min-height: 464px;
         }
 
         table,
@@ -67,23 +103,67 @@
             color: white;
             font-size: 14px !important;
         }
-        td input{
+
+        td input {
             width: 18px;
             height: 18px;
+            cursor: pointer;
         }
 
         .glyphicon-play {
             border: 1px solid white !important;
         }
-        .all-check{
-            padding-left: 41px;
+
+        .all-check {
+            padding-left: 40px;
             font-size: 16px;
             color: #0091f2;
+            cursor: pointer;
         }
-        .all-check input{
+
+        .all-check input {
             width: 20px;
             height: 20px;
             vertical-align: sub;
+        }
+
+        .del-check {
+            margin-left: 40px;
+            padding: 1px 12px;
+            font-size: 16px;
+            color: #0091f2;
+            border: 1px solid #0091f2;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .del-check i {
+            vertical-align: middle;
+        }
+
+        .nav-pages{
+            margin: 0 5px;
+            float: right;
+            display: inline-block;
+        }
+
+        .nav-pages i {
+            display: inline-block;
+            margin: 0 5px;
+            width: 26px;
+            line-height: 24px;
+            text-align: center;
+            font-style: normal;
+            color: #0091f2;
+            border-radius: 3px;
+            font-size: 16px;
+            border: 1px solid #0091f2;
+            cursor: pointer;
+        }
+
+        .nav-pages i:hover, i.act{
+            color: white;
+            background: #0091f2;
         }
     </style>
 </head>
@@ -93,10 +173,13 @@
     <hr>
 
     <section class="container">
-        <header>
-            <input type="text" id="search-txt" placeholder="歌名/作者" />
-            <button id="search-btn" class="glyphicon glyphicon-search"> 搜索</button>
-        </header>
+        <div class="col-md-12">
+            <header>
+                <input type="text" id="search-txt" placeholder="歌名/作者" />
+                <button class="glyphicon glyphicon-search" id="search-btn" > 搜索</button>
+                <ul class="search-box" id="search-box" ></ul>
+            </header>
+        </div>
     </section>
 
     <section class="container">
@@ -121,9 +204,12 @@
             </div>
         </div>
         <div>
-            <label class="all-check"><input type="checkbox" id="allCheck" /> 全选 / 全不选</label>
+            <label class="all-check"><input type="checkbox" id="all-check" /> 全选 / 全不选</label>
+            <label class="del-check" id="del-check" ><i class="glyphicon glyphicon-trash"></i> 删除已选</label>
+            <label class="del-check nav-pages" id="totalnum">共1条</label>
+            <nav class="nav-pages" id="nav-pages"><i class="act">1</i></nav>
             <button id="import-music-btn" class="btn btn-block btn-success" disabled>
-                <span class="glyphicon glyphicon-send" aria-hidden="true"></span> 导入到音乐库
+                <i class="glyphicon glyphicon-send" aria-hidden="true"></i> 添加到音乐列表
             </button>
         </div>
         <br /><br />

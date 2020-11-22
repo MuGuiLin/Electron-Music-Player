@@ -1,13 +1,14 @@
 const { ipcRenderer } = require('electron');
 
 // import { $getDom } from './base';
+const $ = require('../public/js/jquery.min.3.4.0.js');
 
 const { $getDom, $getAll, $countTime } = require('./base');
 
 //音乐数据
 let musicArr = [];
 
-//自动播放项
+//播放索引
 let nowNum = localStorage.getItem('NOTNUMBER') || 0;
 
 //当前播放项
@@ -24,8 +25,11 @@ const sumTime = (path) => {
 };
 
 const musicPlay = () => {
+    console.log(nowNum);
+    nowNum = nowNum > musicArr.length - 1 ? musicArr.length - 1 : nowNum;
     oAudio.src = musicArr[nowNum].path;
     oAudio.play();
+    $('#container').scrollTop($('#music-list-box li').eq(0).outerHeight(true) *  nowNum);
 };
 
 const autoPlay = () => {
@@ -55,6 +59,25 @@ const loopPlay = () => {
     };
 };
 
+const downLoad = (name, href) => {
+    name = 0 < name.search('.mp3') ? name : name + '.mp3';
+
+    // js下载方法
+    // var a = document.createElement("a"),
+    // e = document.createEvent("MouseEvents");
+    // e.initEvent("click", false, false);
+    // a.href = href;
+    // a.download = name;
+    // a.title = name;
+    // a.alt = name;
+    // a.dispatchEvent(e);
+    // a.remove();
+
+    // electron下载方法
+    ipcRenderer.send('music-download', { name: name, path: href });
+    // ipcRenderer.send('down-load-music', { status: 1, path: musicArr[nowNum] });
+};
+
 const listDomArr = (o) => {
     return [...$getAll('#music-list-box li')];
 };
@@ -68,9 +91,10 @@ const render = (arr) => {
                     <div class="music-item-box-top">
                         <div class="music-item-name"><i class="glyphicon glyphicon-music"></i>${o.name}</div>
                         <div class="music-item-btn">
-                            <button class="btn btn-xs glyphicon glyphicon-play" data-id="${o.id}"></button>
-                            <button class="btn btn-xs glyphicon glyphicon-heart-empty" data-id="${o.id}"></button>
-                            <button class="btn btn-xs glyphicon glyphicon-trash" data-id="${o.id}"></button>
+                            <button class="btn btn-xs glyphicon glyphicon-play" title="播放" data-id="${o.id}"></button>
+                            <button class="btn btn-xs glyphicon glyphicon-heart-empty" title="收藏" data-id="${o.id}"></button>
+                            <button class="btn btn-xs glyphicon glyphicon-trash" title="删除" data-id="${o.id}"></button>
+                            <button class="btn btn-xs glyphicon glyphicon-download-alt" title="下载" data-id="${o.id}" data-name="${o.name}" data-path="${o.path}" ></button>
                         </div>
                         <div class="music-item-time music-item-sum-time"><time>${o.time || '00:00'}</time></div>
                     </div>
@@ -124,16 +148,40 @@ const nextPlay = () => {
     saveNowNum();
     musicPlay();
 };
+
 //初始化音乐列表
 ipcRenderer.on('init-main-win', (event, res) => {
     if (0 < res.data.length) {
         render(res.data);
         musicArr = res.data;
+        if (res.now) nowNum = res.now;
+        oAudio.volume = .5;
         autoPlay();
     } else {
         $getDom('#music-list-box').innerHTML = `<li><i class="glyphicon glyphicon-headphones"> 您的播放列表，空空如也！</i></li>`;
     };
 });
+
+//监听下载状态 -> main process里发出的message
+ipcRenderer.on('down-load-state', (event, { state, path }) => {
+    if (state == 'completed') {
+        alert('OK 下载成功！');
+    } else {
+        alert(`NO 下载失败: ${state}`);
+    }
+});
+
+//下载网络音乐
+$getDom('#down-load-btn').addEventListener('click', () => {
+    ipcRenderer.send('down-load-music', { status: 1, path: musicArr[nowNum] });
+}, false);
+
+//下载网络音乐
+$getDom('#down-play-btn').addEventListener('click', () => {
+    // ipcRenderer.send('down-load-music', { status: 1, path: musicArr[nowNum]});
+
+    downLoad(musicArr[nowNum].name, musicArr[nowNum].path);
+}, false);
 
 //添加本地音乐
 $getDom('#add-local-btn').addEventListener('click', () => {
@@ -196,6 +244,10 @@ $getDom('#music-list-box').addEventListener('click', (event) => {
     //删除
     else if (id && classList.contains('glyphicon-trash')) {
         ipcRenderer.send('remove-music-item', id);
+    }
+    //下载
+    else if (id && classList.contains('glyphicon-download-alt')) {
+        dataset.path && downLoad(dataset.name, dataset.path);
     };
 });
 
@@ -205,7 +257,7 @@ oAudio.addEventListener('loadedmetadata', (event) => {
     playRender($countTime(oAudio.duration || 0));
     $nowDom.classList.remove('error');
     $nowDom.querySelector('img')['style']['animation-play-state'] = 'running';
-    if($nowDom.querySelector('.glyphicon-play')) $nowDom.querySelector('.glyphicon-play').classList.replace('glyphicon-play', 'glyphicon-pause');
+    if ($nowDom.querySelector('.glyphicon-play')) $nowDom.querySelector('.glyphicon-play').classList.replace('glyphicon-play', 'glyphicon-pause');
     if ('00:00' == musicArr[nowNum].time) {
         ipcRenderer.send('uptime-music-item', { id: $nowDom.getAttribute('data-id'), time: $countTime(oAudio.duration || 0) });
     };
@@ -251,7 +303,7 @@ oAudio.addEventListener('ended', (event) => {
     if (oAudio.loop) {
         musicPlay();
     } else {
-        nowNum = (nowNum == musicArr.length - 1) ? 0 : nowNum + 1;
+        nowNum = (nowNum == musicArr.length - 1) ? 0 : 1 + nowNum;
         saveNowNum();
         musicPlay();
     };
@@ -289,7 +341,8 @@ $getDom('#rest-play-btn').addEventListener('click', function () {
 
 //停止播放
 $getDom('#stop-play-btn').addEventListener('click', function () {
-    oAudio.stop();
+    oAudio.pause();
+    oAudio.currentTime = 0;
 }, false);
 
 //下一曲
@@ -313,7 +366,7 @@ $getDom('#loop-play-btn').addEventListener('click', function () {
 
 //音量大小
 $getDom('#volu-size-btn').addEventListener('click', function () {
-    
+
 }, false);
 
 $getDom('#progress-box').addEventListener('mousedown', function (e) {
@@ -333,8 +386,8 @@ $getDom('#progress-box').addEventListener('mousedown', function (e) {
 
 $getDom('#volume-box').addEventListener('mousedown', function (e) {
     e = e || window.event;
-    let getofx = e.offsetY  ;
+    let getofx = e.offsetY;
 
-    $getDom('#volume-bar')['style']['height'] = (-getofx + 180)+'px';
+    $getDom('#volume-bar')['style']['height'] = (-getofx + 180) + 'px';
     oAudio.volume = (-getofx + 180) / 180;
 }, false);
